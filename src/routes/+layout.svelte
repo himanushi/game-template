@@ -11,11 +11,5 @@
 </script>
 
 <ion-app>
-	<ion-header>
-		<ion-toolbar />
-	</ion-header>
 	<slot />
-	<ion-footer>
-		<ion-toolbar />
-	</ion-footer>
 </ion-app>
