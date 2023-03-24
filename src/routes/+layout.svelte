@@ -14,9 +14,7 @@
 	<ion-header>
 		<ion-toolbar />
 	</ion-header>
-	<ion-content scroll-x={false}>
-		<slot />
-	</ion-content>
+	<slot />
 	<ion-footer>
 		<ion-toolbar />
 	</ion-footer>
