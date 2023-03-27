@@ -28,9 +28,9 @@
 						role: 'user',
 						content: `
 JavaScript で実行する。pixi.js の v7 を使用している。
-global に app が存在する。app は代入せずにそのまま使用すること。gsap は使用可能。画像は使用しないこと。
-図形以外のものを指定された場合は形が近い図形を使用すること。それぞれのオブジェクトはぶつかるようにすること。
-${message}。絶対必ず {"eval":"javascript を string で入力"} のJSONフォーマットでのみを返すこと。コードのみ提供して説明不要。`
+global に app が存在する。絶対に app は再代入せずにそのまま使用すること。gsap は使用可能。画像は使用しないこと。
+図形以外のものを指定された場合は形が近い図形を使用すること。それぞれのオブジェクトは衝突判定が存在すること。return は使用しないこと。
+${message}。絶対必ず {"eval":"javascript を string で入力"} のJSONフォーマットでのみを返すこと。プロパティは eval のみにすること。コードのみ提供して説明不要。`
 					}
 				],
 				model: 'gpt-3.5-turbo'
@@ -38,10 +38,10 @@ ${message}。絶対必ず {"eval":"javascript を string で入力"} のJSONフ�
 		});
 		const json: ResponseJson = await response.json();
 		loading = false;
-		console.log(json.choices[0].message.content);
-		const evalJson = JSON.parse(
-			json.choices[0].message.content.replaceAll('\n', '').replaceAll('\n', '')
-		)['eval'];
+		const content = json.choices[0].message.content;
+		window.content = content;
+		console.log(content);
+		const evalJson = JSON.parse(content.replaceAll('\n', ''))['eval'].replaceAll('\\', '');
 		console.log(evalJson);
 		eval(evalJson);
 	};
