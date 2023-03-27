@@ -2,6 +2,7 @@
 	import * as PIXI from 'pixi.js';
 	import { onMount } from 'svelte';
 	import { apiKey } from '~/store/apiKey';
+	import { prompt } from '~/store/prompt';
 
 	let content: any;
 	let width = window.innerWidth;
@@ -13,7 +14,6 @@
 		choices: { 0: { message: { content: string } } };
 	};
 
-	let message = '';
 	const send = async () => {
 		loading = true;
 		const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -27,10 +27,10 @@
 					{
 						role: 'user',
 						content: `
-JavaScript で実行する。pixi.js の v7 を使用している。
-global に app が存在する。絶対に app は再代入せずにそのまま使用すること。gsap は使用可能。画像は使用しないこと。
-図形以外のものを指定された場合は形が近い図形を使用すること。それぞれのオブジェクトは衝突判定が存在すること。return は使用しないこと。
-${message}。絶対必ず {"eval":"javascript を string で入力"} のJSONフォーマットでのみを返すこと。プロパティは eval のみにすること。コードのみ提供して説明不要。`
+JavaScript で実行する。pixi.js の v7 を使用している。global に app が存在する。絶対に app は再代入せずにそのまま使用すること。
+gsap は使用可能。画像は使用しないこと。図形以外のものを指定された場合は形が近い図形を使用すること。それぞれのオブジェクトは衝突判定が存在すること。
+return は使用しないこと。絶対必ず JavaScript の eval で実行できるコードのみにすること。説明とコメントアウトは不要です。
+${$prompt}。`
 					}
 				],
 				model: 'gpt-3.5-turbo'
@@ -39,11 +39,11 @@ ${message}。絶対必ず {"eval":"javascript を string で入力"} のJSONフ�
 		const json: ResponseJson = await response.json();
 		loading = false;
 		const content = json.choices[0].message.content;
-		window.content = content;
+		// window.content = content;
 		console.log(content);
-		const evalJson = JSON.parse(content.replaceAll('\n', ''))['eval'].replaceAll('\\', '');
-		console.log(evalJson);
-		eval(evalJson);
+		// const evalJson = JSON.parse(content.replaceAll('\n', ''))['eval'].replaceAll('\\', '');
+		// console.log(evalJson);
+		eval(content);
 	};
 
 	onMount(() => {
@@ -80,12 +80,12 @@ ${message}。絶対必ず {"eval":"javascript を string で入力"} のJSONフ�
 				<ion-textarea
 					rows={1}
 					auto-grow={true}
-					value={message}
 					on:ionChange={(e) => {
 						if (e.detail.value || e.detail.value === '') {
-							message = e.detail.value;
+							prompt.set(e.detail.value);
 						}
 					}}
+					value={$prompt}
 					placeholder="Message"
 				/>
 				<ion-buttons slot="end">
