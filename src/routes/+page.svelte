@@ -28,7 +28,8 @@
 						role: 'user',
 						content: `
 JavaScript で実行する。pixi.js の v7 を使用している。
-global に app が存在する。app は代入せずにそのまま使用すること。画像は使用しないこと。図形以外のものを指定された場合は形が近い図形を使用すること。
+global に app が存在する。app は代入せずにそのまま使用すること。gsap は使用可能。画像は使用しないこと。
+図形以外のものを指定された場合は形が近い図形を使用すること。それぞれのオブジェクトはぶつかるようにすること。
 ${message}。絶対必ず {"eval":"javascript を string で入力"} のJSONフォーマットでのみを返すこと。コードのみ提供して説明不要。`
 					}
 				],
@@ -38,7 +39,9 @@ ${message}。絶対必ず {"eval":"javascript を string で入力"} のJSONフ�
 		const json: ResponseJson = await response.json();
 		loading = false;
 		console.log(json.choices[0].message.content);
-		const evalJson = JSON.parse(json.choices[0].message.content.replaceAll('\n', ''))['eval'];
+		const evalJson = JSON.parse(
+			json.choices[0].message.content.replaceAll('\n', '').replaceAll('\n', '')
+		)['eval'];
 		console.log(evalJson);
 		eval(evalJson);
 	};
