@@ -4,6 +4,8 @@
 	import { apiKey } from '~/store/apiKey';
 	import { prompt } from '~/store/prompt';
 
+	window.PIXI = PIXI;
+
 	let content: any;
 	let width = window.innerWidth;
 	let height = window.innerHeight;
