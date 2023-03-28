@@ -29,7 +29,7 @@
 					{
 						role: 'user',
 						content: `
-JavaScript で実行する。pixi.js の v7 を使用している。global に app が存在する。絶対に app は再代入せずにそのまま使用すること。
+JavaScript で実行する。pixi.js の v7 を使用している。 window.app に PIXI.Application が存在する。絶対に app は再代入せずにそのまま使用すること。
 gsap は使用可能。画像は使用しないこと。図形以外のものを指定された場合は形が近い図形を使用すること。それぞれのオブジェクトは衝突判定が存在すること。
 return は使用しないこと。絶対必ず JavaScript の eval で実行できるコードのみにすること。説明とコメントアウトは不要です。
 ${$prompt}。`
@@ -54,6 +54,7 @@ ${$prompt}。`
 			width: width,
 			height: height
 		});
+		window.app = app;
 		content.appendChild(app.view as any);
 	});
 </script>
